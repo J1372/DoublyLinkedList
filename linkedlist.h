@@ -17,7 +17,7 @@ public:
         friend LinkedList<T>;
 
         Node(Node* prev, const T& data, std::unique_ptr<Node>&& next)
-            : prev(prev), data(&data), next(std::move(next))
+            : prev(prev), data(data), next(std::move(next))
         {}
 
         Node(Node* prev, T&& data, std::unique_ptr<Node>&& next)

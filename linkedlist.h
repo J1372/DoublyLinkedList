@@ -43,30 +43,12 @@ public:
 
     void push_back(const T& data)
     {
-        if (head)
-        {
-            tail->next = std::make_unique<Node>(nullptr, data, nullptr);
-            tail = tail->next.get();
-        }
-        else
-        {
-            head = std::make_unique<Node>(nullptr, data, nullptr);
-            tail = head.get();
-        }
+        push_back_internal(std::make_unique<Node>(tail, data, nullptr));
     }
 
     void push_back(T&& data)
     {
-        if (head)
-        {
-            tail->next = std::make_unique<Node>(tail, std::move(data), nullptr);
-            tail = tail->next.get();
-        }
-        else
-        {
-            head = std::make_unique<Node>(nullptr, std::move(data), nullptr);
-            tail = head.get();
-        }
+        push_back_internal(std::make_unique<Node>(tail, std::move(data), nullptr));
     }
 
     void erase(const T& val)
@@ -157,6 +139,20 @@ private:
         if (prev)
         {
             prev->next = std::move(std::unique_ptr<Node>(next)); // last op, this node will be freed.
+        }
+    }
+
+    void push_back_internal(std::unique_ptr<Node>&& node)
+    {
+        if (head)
+        {
+            tail->next = std::move(node);
+            tail = tail->get_next();
+        }
+        else
+        {
+            head = std::move(node);
+            tail = head.get();
         }
     }
 };
